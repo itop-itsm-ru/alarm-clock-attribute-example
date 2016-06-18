@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2">
+  <classes>
+    <class id="Contract">
+      <fields>
+        <field id="end_date" xsi:type="AttributeAlarmClock" _delta="redefine">
+          <sql>end_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <actions>
+            <action>
+              <verb>ChangeStatus</verb>
+              <params>
+                <param>obsolete</param>
+              </params>
+            </action>
+            <action>
+              <verb>Set</verb>
+              <params>
+                <param>description</param>
+                <param>Сработал будильник на дате окончания</param>
+              </params>
+            </action>
+          </actions>
+        </field>
+      </fields>
+      <methods>
+        <method id="ChangeStatus" _delta="define">
+          <static>false</static>
+          <access>public</access>
+          <type>Overload-cmdbAbstractObject</type>
+          <code><![CDATA[
+            public function ChangeStatus($sToStatus, $sFromStatus = null)
+            {
+              if (!isset($sFromStatus)) return $this->Set('status', $sToStatus);
+              return $this->Get('status') == $sFromStatus && $this->Set('status', $sToStatus);
+            }
+            ]]>
+          </code>
+        </method>
+      </methods>
+    </class>
+  </classes>
+</itop_design>
